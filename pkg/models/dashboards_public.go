@@ -16,16 +16,12 @@ var (
 	}
 )
 
-type PublicDashboardConfig struct {
-	IsPublic        bool            `json:"isPublic"`
-	PublicDashboard PublicDashboard `json:"publicDashboard"`
-}
-
 type PublicDashboard struct {
 	Uid          string `json:"uid" xorm:"uid"`
 	DashboardUid string `json:"dashboardUid" xorm:"dashboard_uid"`
-	OrgId        int64  `json:"orgId" xorm:"org_id"`
+	OrgId        int64  `json:"-" xorm:"org_id"` // Don't ever marshal orgId to Json
 	TimeSettings string `json:"timeSettings" xorm:"time_settings"`
+	IsPublic     bool   `json:"isPublic"`
 }
 
 func (pd PublicDashboard) TableName() string {
@@ -37,7 +33,7 @@ func (pd PublicDashboard) TableName() string {
 //
 
 type SavePublicDashboardConfigCommand struct {
-	DashboardUid          string
-	OrgId                 int64
-	PublicDashboardConfig PublicDashboardConfig
+	DashboardUid    string
+	OrgId           int64
+	PublicDashboard PublicDashboard
 }
